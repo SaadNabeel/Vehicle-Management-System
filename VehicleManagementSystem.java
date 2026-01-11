@@ -459,3 +459,26 @@ double c = sc.nextDouble();
 fuels.add(new FuelRecord(id, l, c));
 
 }
+static void addMaintenance() {
+
+System.out.print("Vehicle ID: ");
+
+int id = sc.nextInt();
+
+System.out.print("Cost: ");
+
+double cost = sc.nextDouble();
+
+sc.nextLine();
+
+System.out.print("Reason: ");
+
+String r = sc.nextLine();
+
+System.out.print("Breakdown? (true/false): ");
+
+boolean b = sc.nextBoolean();
+
+maintenances.add(new Maintenance(id, cost, r, b));
+
+}
