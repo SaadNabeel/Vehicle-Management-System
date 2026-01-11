@@ -219,3 +219,243 @@ insurances.add(new Insurance(1, LocalDate.now().plusDays(25)));
 insurances.add(new Insurance(2, LocalDate.now().plusDays(120)));
 
 }
+static Vehicle findVehicle(int id) {
+
+for (Vehicle v : vehicles) if (v.id == id) return v;
+
+return null;
+
+}
+
+static Driver findDriver(int id) {
+
+for (Driver d : drivers) if (d.id == id) return d;
+
+return null;
+
+}
+
+static Customer findCustomer(int id) {
+
+for (Customer c : customers) if (c.id == id) return c;
+
+return null;
+
+}
+
+static void log(String msg) {
+
+auditLogs.add(LocalDateTime.now() + " | " + msg);
+
+}
+static void addVehicle() {
+
+System.out.print("ID: ");
+
+int id = sc.nextInt();
+
+sc.nextLine();
+
+System.out.print("Model: ");
+
+String m = sc.nextLine();
+
+System.out.print("Type: ");
+
+String t = sc.nextLine();
+
+System.out.print("Purchase Value: ");
+
+double pv = sc.nextDouble();
+
+vehicles.add(new Vehicle(id, m, t, pv));
+
+log("Vehicle added " + id);
+
+}
+
+static void retireVehicle() {
+
+System.out.print("Vehicle ID: ");
+
+int id = sc.nextInt();
+
+Vehicle v = findVehicle(id);
+
+if (v != null) {
+
+v.active = false;
+
+v.available = false;
+
+log("Vehicle retired " + id);
+
+}
+
+}
+static void rateDriver() {
+
+System.out.print("Driver ID: ");
+
+int id = sc.nextInt();
+
+System.out.print("Rating (1-5): ");
+
+double r = sc.nextDouble();
+
+Driver d = findDriver(id);
+
+if (d != null) {
+
+d.rating = (d.rating + r) / 2;
+
+log("Driver rated " + id);
+
+}
+
+}
+
+static void blacklistCustomer() {
+
+System.out.print("Customer ID: ");
+
+int id = sc.nextInt();
+
+Customer c = findCustomer(id);
+
+if (c != null) {
+
+c.blacklisted = true;
+
+log("Customer blacklisted " + id);
+
+}
+
+}
+static double calculateRate(Customer c, Vehicle v) {
+
+double base = 30;
+
+if (v.type.equalsIgnoreCase("Microbus")) base += 10;
+
+if (c.tier().equals("Gold")) base -= 2;
+
+if (c.tier().equals("Platinum")) base -= 5;
+
+return base;
+
+}
+
+static void createTrip() {
+
+System.out.print("Vehicle ID: ");
+
+int vId = sc.nextInt();
+
+System.out.print("Driver ID: ");
+
+int dId = sc.nextInt();
+
+System.out.print("Customer ID: ");
+
+int cId = sc.nextInt();
+
+System.out.print("KM: ");
+
+int km = sc.nextInt();
+
+Vehicle v = findVehicle(vId);
+
+Driver d = findDriver(dId);
+
+Customer c = findCustomer(cId);
+
+}
+}
+
+Vehicle v = findVehicle(vId);
+
+Driver d = findDriver(dId);
+
+Customer c = findCustomer(cId);
+
+if (v == null || d == null || c == null || !v.available || !d.available || c.blacklisted) {
+
+System.out.println("Trip rejected by governance rules.");
+
+return;
+
+}
+
+double rate = calculateRate(c, v);
+
+Trip t = new Trip(tripSequence++, vId, dId, cId, km, rate);
+
+trips.add(t);
+
+v.available = false;
+
+d.available = false;
+
+v.totalkm += km;
+
+d.totalTrips++;
+
+c.loyaltyPoints += km / 3;
+
+c.outstanding += t.bill;
+
+log("Trip created " + t.id);
+
+System.out.println("Trip created. Bill: " + t.bill);
+
+}
+
+static void completeTrip() {
+
+System.out.print("Trip ID: ");
+static void completeTrip() {
+
+System.out.print("Trip ID: ");
+
+int id = sc.nextInt();
+
+for (Trip t : trips) {
+
+if (t.id == id && !t.completed) {
+
+t.completed = true;
+
+findVehicle(t.vehicleId).available = true;
+
+findDriver(t.driverId).available = true;
+
+log("Trip completed " + id);
+
+return;
+
+}
+
+}
+
+}
+
+========= COST MODULE =====
+
+static void addFuel() {
+
+System.out.print("Vehicle ID: ");
+
+int id = sc.nextInt();
+
+System.out.print("Liters: ");
+
+double l = sc.nextDouble();
+
+System.out.print("Cost: ");
+
+double c = sc.nextDouble();
+
+fuels.add(new FuelRecord(id, l, c));
+
+}
