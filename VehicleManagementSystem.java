@@ -1,4 +1,5 @@
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class VehicleManagementSystem {
@@ -6,7 +7,6 @@ public class VehicleManagementSystem {
 static Scanner sc = new Scanner(System.in);
 
 static class Vehicle {
-
 int id;
 String model;
 String type;
@@ -24,21 +24,16 @@ this.purchaseValue = purchaseValue;
 this.addedDate = LocalDate.now();
 }
 
-}
-
-}
 public String toString() {
-
 return id + " | " + model + " | " + type +
 " | Active:" + active +
 " | Available:" + available +
 " | KM:" + totalkm +
 " | Value:" + purchaseValue;
-
+}
 }
 
 static class Driver {
-
 int id;
 String name;
 boolean active = true;
@@ -53,20 +48,17 @@ this.id = id;
 this.name = name;
 }
 
-}
 public String toString() {
-
-return id + "|" + name +
+return id + " | " + name +
 " | Trips:" + totalTrips +
 " | Rating:" + rating +
 " | Penalty:" + penalties +
 " | Bonus:" + bonuses +
 " | Active:" + active;
-
+}
 }
 
 static class Customer {
-
 int id;
 String name;
 int loyaltyPoints;
@@ -79,27 +71,22 @@ this.id = id;
 this.name = name;
 }
 
-}
 String tier() {
-
 if (loyaltyPoints >= 1000) return "Platinum";
 if (loyaltyPoints >= 400) return "Gold";
 return "Standard";
-
 }
 
 public String toString() {
-
 return id + " | " + name +
 " | Tier:" + tier() +
 " | Points:" + loyaltyPoints +
 " | Outstanding:" + outstanding +
 " | Blacklisted:" + blacklisted;
-
+}
 }
 
 static class Trip {
-
 int id;
 int vehicleId;
 int driverId;
@@ -110,11 +97,7 @@ double bill;
 LocalDate date;
 boolean completed;
 
-}
-}
-
 Trip(int id, int v, int d, int c, int km, double rate) {
-
 this.id = id;
 this.vehicleId = v;
 this.driverId = d;
@@ -123,11 +106,9 @@ this.km = km;
 this.rate = rate;
 this.bill = km * rate;
 this.date = LocalDate.now();
-
 }
 
 public String toString() {
-
 return id + " | " + date +
 " | V:" + vehicleId +
 " | D:" + driverId +
@@ -136,62 +117,48 @@ return id + " | " + date +
 " | Rate:" + rate +
 " | Bill:" + bill +
 " | Done:" + completed;
-
 }
-static class FuelRecord {
+}
 
+static class FuelRecord {
 int vehicleId;
 double liters;
 double cost;
 LocalDate date;
 
 FuelRecord(int v, double l, double c) {
-
 vehicleId = v;
 liters = l;
 cost = c;
 date = LocalDate.now();
-
 }
-
 }
 
 static class Maintenance {
-
 int vehicleId;
 double cost;
 String reason;
 LocalDate date;
 boolean breakdown;
 
-}
 Maintenance(int v, double c, String r, boolean b) {
-
 vehicleId = v;
 cost = c;
 reason = r;
 breakdown = b;
 date = LocalDate.now();
-
 }
-
 }
 
 static class Insurance {
-
 int vehicleId;
 LocalDate expiry;
 
 Insurance(int v, LocalDate e) {
-
 vehicleId = v;
 expiry = e;
-
 }
-
 }
-
-// ============================== DATA STORES ==============================
 
 static List<Vehicle> vehicles = new ArrayList<>();
 static List<Driver> drivers = new ArrayList<>();
@@ -205,280 +172,261 @@ static List<String> auditLogs = new ArrayList<>();
 static int tripSequence = 1;
 
 static void seedData() {
-
 vehicles.add(new Vehicle(1, "Toyota Axio", "Car", 2500000));
 vehicles.add(new Vehicle(2, "Hiace", "Microbus", 4200000));
-
 drivers.add(new Driver(1, "Rahim"));
 drivers.add(new Driver(2, "Karim"));
-
 customers.add(new Customer(1, "ACME Ltd"));
 customers.add(new Customer(2, "John Doe"));
-
 insurances.add(new Insurance(1, LocalDate.now().plusDays(25)));
 insurances.add(new Insurance(2, LocalDate.now().plusDays(120)));
-
 }
+
 static Vehicle findVehicle(int id) {
-
 for (Vehicle v : vehicles) if (v.id == id) return v;
-
 return null;
-
 }
 
 static Driver findDriver(int id) {
-
 for (Driver d : drivers) if (d.id == id) return d;
-
 return null;
-
 }
 
 static Customer findCustomer(int id) {
-
 for (Customer c : customers) if (c.id == id) return c;
-
 return null;
-
 }
 
 static void log(String msg) {
-
 auditLogs.add(LocalDateTime.now() + " | " + msg);
-
 }
+
 static void addVehicle() {
-
 System.out.print("ID: ");
-
 int id = sc.nextInt();
-
 sc.nextLine();
-
 System.out.print("Model: ");
-
 String m = sc.nextLine();
-
 System.out.print("Type: ");
-
 String t = sc.nextLine();
-
 System.out.print("Purchase Value: ");
-
 double pv = sc.nextDouble();
-
 vehicles.add(new Vehicle(id, m, t, pv));
-
 log("Vehicle added " + id);
-
 }
 
 static void retireVehicle() {
-
 System.out.print("Vehicle ID: ");
-
 int id = sc.nextInt();
-
 Vehicle v = findVehicle(id);
-
 if (v != null) {
-
 v.active = false;
-
 v.available = false;
-
 log("Vehicle retired " + id);
-
+}
 }
 
-}
 static void rateDriver() {
-
 System.out.print("Driver ID: ");
-
 int id = sc.nextInt();
-
 System.out.print("Rating (1-5): ");
-
 double r = sc.nextDouble();
-
 Driver d = findDriver(id);
-
 if (d != null) {
-
 d.rating = (d.rating + r) / 2;
-
 log("Driver rated " + id);
-
 }
-
 }
 
 static void blacklistCustomer() {
-
 System.out.print("Customer ID: ");
-
 int id = sc.nextInt();
-
 Customer c = findCustomer(id);
-
 if (c != null) {
-
 c.blacklisted = true;
-
 log("Customer blacklisted " + id);
-
+}
 }
 
-}
 static double calculateRate(Customer c, Vehicle v) {
-
 double base = 30;
-
 if (v.type.equalsIgnoreCase("Microbus")) base += 10;
-
 if (c.tier().equals("Gold")) base -= 2;
-
 if (c.tier().equals("Platinum")) base -= 5;
-
 return base;
-
 }
 
 static void createTrip() {
-
 System.out.print("Vehicle ID: ");
-
 int vId = sc.nextInt();
-
 System.out.print("Driver ID: ");
-
 int dId = sc.nextInt();
-
 System.out.print("Customer ID: ");
-
 int cId = sc.nextInt();
-
 System.out.print("KM: ");
-
 int km = sc.nextInt();
 
 Vehicle v = findVehicle(vId);
-
 Driver d = findDriver(dId);
-
-Customer c = findCustomer(cId);
-
-}
-}
-
-Vehicle v = findVehicle(vId);
-
-Driver d = findDriver(dId);
-
 Customer c = findCustomer(cId);
 
 if (v == null || d == null || c == null || !v.available || !d.available || c.blacklisted) {
-
 System.out.println("Trip rejected by governance rules.");
-
 return;
-
 }
 
 double rate = calculateRate(c, v);
-
 Trip t = new Trip(tripSequence++, vId, dId, cId, km, rate);
-
 trips.add(t);
-
 v.available = false;
-
 d.available = false;
-
 v.totalkm += km;
-
 d.totalTrips++;
-
 c.loyaltyPoints += km / 3;
-
 c.outstanding += t.bill;
-
 log("Trip created " + t.id);
-
 System.out.println("Trip created. Bill: " + t.bill);
-
 }
 
 static void completeTrip() {
-
 System.out.print("Trip ID: ");
-static void completeTrip() {
-
-System.out.print("Trip ID: ");
-
 int id = sc.nextInt();
-
 for (Trip t : trips) {
-
 if (t.id == id && !t.completed) {
-
 t.completed = true;
-
 findVehicle(t.vehicleId).available = true;
-
 findDriver(t.driverId).available = true;
-
 log("Trip completed " + id);
-
 return;
-
 }
-
 }
-
 }
-
-========= COST MODULE =====
 
 static void addFuel() {
-
 System.out.print("Vehicle ID: ");
-
 int id = sc.nextInt();
-
 System.out.print("Liters: ");
-
 double l = sc.nextDouble();
-
 System.out.print("Cost: ");
-
 double c = sc.nextDouble();
-
 fuels.add(new FuelRecord(id, l, c));
+}
+
+static void addMaintenance() {
+System.out.print("Vehicle ID: ");
+int id = sc.nextInt();
+System.out.print("Cost: ");
+double cost = sc.nextDouble();
+sc.nextLine();
+System.out.print("Reason: ");
+String r = sc.nextLine();
+System.out.print("Breakdown? (true/false): ");
+boolean b = sc.nextBoolean();
+maintenances.add(new Maintenance(id, cost, r, b));
+}
+static void profitReport() {
+double revenue = 0, fuel = 0, maint = 0;
+for (Trip t : trips) revenue += t.bill;
+for (FuelRecord f : fuels) fuel += f.cost;
+for (Maintenance m : maintenances) maint += m.cost;
+System.out.println("Revenue: " + revenue);
+System.out.println("Fuel Cost: " + fuel);
+System.out.println("Maintenance Cost: " + maint);
+System.out.println("Net Profit: " + (revenue - fuel - maint));
+}
+
+static void insuranceAlerts() {
+for (Insurance i : insurances) {
+long days = ChronoUnit.DAYS.between(LocalDate.now(), i.expiry);
+if (days <= 30)
+System.out.println("Insurance expiring for Vehicle " + i.vehicleId + " in " + days + " days");
+}
+}
+
+static void auditReport() {
+auditLogs.forEach(System.out::println);
+}
+static void auditReport() {
+
+auditLogs.forEach(System.out::println);
 
 }
-static void addMaintenance() {
 
-System.out.print("Vehicle ID: ");
+static void dashboard() {
 
-int id = sc.nextInt();
+System.out.println("Vehicles: " + vehicles.size());
 
-System.out.print("Cost: ");
+System.out.println("Drivers: " + drivers.size());
 
-double cost = sc.nextDouble();
+System.out.println("Customers: " + customers.size());
 
-sc.nextLine();
+System.out.println("Trips: " + trips.size());
 
-System.out.print("Reason: ");
+profitReport();
 
-String r = sc.nextLine();
+insuranceAlerts();
 
-System.out.print("Breakdown? (true/false): ");
+}
 
-boolean b = sc.nextBoolean();
+//
 
-maintenances.add(new Maintenance(id, cost, r, b));
+========== MAIN
+
+public static void main(String[] args) {
+
+seedData();
+
+while (true) {
+
+System.out.println(
+
+"\n1.Dashboard\n2.Add Vehicle\n3.Retire Vehicle\n4.Create Trip\n5.Complete Trip\n" +
+
+"6. Add Fuel\n7. Add Maintenance\n8. Rate Driver\n9. Blacklist Customer\n" +
+
+"10. View Vehicles\n11. View Drivers\n12. View Customers\n13. View Trips\n" +
+
+"14. Profit Report\n15. Audit Logs\n16. Exit"
+
+);
+
+int ch = sc.nextInt();
+
+switch (ch) {
+    switch (ch) {
+
+case 1 -> dashboard();
+
+case 2 -> addVehicle();
+
+case 3 -> removeVehicle();
+
+case 4 -> createTrip();
+
+case 5 -> completeTrip();
+
+case 6 -> addFuel();
+
+case 7 -> addMaintenance();
+
+case 8 -> rateDriver();
+
+case 9 -> blacklistCustomer();
+
+case 10 -> vehicles.forEach(System.out::println);
+
+case 11 -> drivers.forEach(System.out::println);
+
+case 12 -> customers.forEach(System.out::println);
+
+case 13 -> trips.forEach(System.out::println);
+
+case 14 -> profitReport();
+
+case 15 -> auditReport();
+
+case 16 -> { return; }
+
+}
 
 }
